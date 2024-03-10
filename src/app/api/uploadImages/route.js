@@ -1,19 +1,16 @@
-import multerMiddleware from "dd(@/Utility/multer)";
-import { NextResponse } from "next/server";
-import path from "path";
 import { writeFile } from "fs/promises";
+import path from "path";
+import { NextResponse } from "next/server";
 
-export const config = {
-  runtime: "nodejs",
-  api: {
-    bodyParser: false,
-  },
-};
+export async function POST(req, res) {
+  if (req.method !== "POST") {
+    return NextResponse.error(new Error("Method Not Allowed"), { status: 405 });
+  }
 
-export const POST = async (req, res) => {
   const formData = await req.formData();
   const images = formData.getAll("Images");
   const imagesPath = [];
+
   if (!images || images.length === 0) {
     return NextResponse.json({ error: "No images received." }, { status: 400 });
   }
@@ -28,7 +25,10 @@ export const POST = async (req, res) => {
         buffer
       );
     } catch (error) {
-      throw new Error("Error occurred while saving image:", error);
+      return NextResponse.error(
+        new Error("Error occurred while saving image:" + error),
+        { status: 500 }
+      );
     }
   }
 
@@ -37,4 +37,10 @@ export const POST = async (req, res) => {
     url: imagesPath,
     status: 201,
   });
+}
+
+export const config = {
+  api: {
+    bodyParser: false, // Disable built-in bodyParser to handle formData
+  },
 };
