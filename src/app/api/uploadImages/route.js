@@ -39,8 +39,10 @@ export async function POST(req, res) {
   });
 }
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable built-in bodyParser to handle formData
-  },
-};
+export function routeConfig() {
+  return {
+    api: {
+      bodyParser: false, // Disable built-in bodyParser to handle formData
+    },
+  };
+}
