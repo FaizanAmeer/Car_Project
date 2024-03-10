@@ -1,0 +1,537 @@
+// "use client";
+
+// import React, { useState } from "react";
+// import {
+//   TextField,
+//   Button,
+//   Container,
+//   Typography,
+//   Grid,
+//   Card,
+//   CardMedia,
+//   Dialog,
+//   DialogContent,
+//   DialogActions,
+//   Divider,
+// } from "@mui/material";
+// import VisibilityIcon from "@mui/icons-material/Visibility";
+// import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
+// import { useForm } from "react-hook-form";
+// const schema = yup.object().shape({
+//   carModel: yup.string().required("Car model is required"),
+//   price: yup.number().required("Price is required"),
+//   phoneNumber: yup
+//     .string()
+//     .matches(/^[0-9]{11}$/, "Invalid phone number")
+//     .required("Phone number is required"),
+//   maxPictures: yup
+//     .number()
+//     .min(1, "Min value is 1")
+//     .max(10, "Max value is 10")
+//     .required("Max number of pictures is required"),
+// });
+
+// function CarDetail() {
+//   const [carModel, setCarModel] = useState("");
+//   const [price, setPrice] = useState("");
+//   const [phoneNumber, setPhoneNumber] = useState("");
+//   const [maxPictures, setMaxPictures] = useState(5); // Default max pictures
+//   const [pictures, setPictures] = useState([]);
+//   const [selectedImage, setSelectedImage] = useState(null);
+//   const [errors, setErrors] = useState({});
+
+//   const { handleSubmit } = useForm();
+//   console.log(errors);
+
+//   const handleFileChange = (e) => {
+//     const files = Array.from(e.target.files);
+//     const urls = files.map((file) => URL.createObjectURL(file));
+//     const newUrls = urls.filter((url) => typeof url === "string"); // Filter out non-URL values
+//     console.log(newUrls);
+//     const limitedUrls = newUrls.slice(0, maxPictures); // Limit the number of pictures
+//     setPictures([...limitedUrls]);
+//   };
+
+//   const handleRemovePicture = (index) => {
+//     const updatedPictures = pictures.filter((_, i) => i !== index);
+//     setPictures(updatedPictures);
+//   };
+
+//   const handleViewImage = (image) => {
+//     setSelectedImage(image);
+//   };
+
+//   const handleCloseImage = () => {
+//     setSelectedImage(null);
+//   };
+
+//   const handleFormSubmit = async (data) => {
+//     try {
+//       // Validate form data using Yup schema
+//       await schema.validate(
+//         { carModel, price, phoneNumber, maxPictures },
+//         { abortEarly: false }
+//       );
+
+//       // Here you can handle the form submission, for example, send the data to a server
+//       console.log("Form submitted:", {
+//         carModel,
+//         price,
+//         phoneNumber,
+//         maxPictures,
+//       });
+//     } catch (validationErrors) {
+//       // Update errors state with validation errors
+//       const newErrors = {};
+//       validationErrors.inner.forEach((error) => {
+//         newErrors[error.path] = error.message;
+//       });
+//       setErrors(newErrors);
+//     }
+//   };
+
+//   return (
+//     <Container maxWidth="sm">
+//       <Typography variant="h4" align="center" gutterBottom>
+//         Car Information
+//       </Typography>
+//       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+//         <Grid container spacing={2}>
+//           <Grid item xs={12} md={6}>
+//             <TextField
+//               label="Car Model"
+//               variant="outlined"
+//               fullWidth
+//               value={carModel}
+//               onChange={(e) => setCarModel(e.target.value)}
+//               error={!!errors.carModel}
+//               helperText={errors.carModel}
+//             />
+//           </Grid>
+//           <Grid item xs={12} md={6}>
+//             <TextField
+//               label="Price"
+//               variant="outlined"
+//               fullWidth
+//               value={price}
+//               onChange={(e) => setPrice(e.target.value)}
+//               error={!!errors.price}
+//               helperText={errors.price}
+//             />
+//           </Grid>
+//           <Grid item xs={12}>
+//             <TextField
+//               label="Phone Number"
+//               variant="outlined"
+//               fullWidth
+//               value={phoneNumber}
+//               onChange={(e) => setPhoneNumber(e.target.value)}
+//               error={!!errors.phoneNumber}
+//               helperText={errors.phoneNumber}
+//             />
+//           </Grid>
+//           <Grid item xs={12}>
+//             <TextField
+//               label="Max Number of Pictures"
+//               variant="outlined"
+//               type="number"
+//               fullWidth
+//               value={maxPictures}
+//               onChange={(e) => setMaxPictures(parseInt(e.target.value))}
+//               error={!!errors.maxPictures}
+//               helperText={errors.maxPictures}
+//             />
+//           </Grid>
+//           <Grid item xs={12}>
+//             <input
+//               accept="image/*"
+//               id="contained-button-file"
+//               type="file"
+//               style={{ display: "none" }}
+//               onChange={handleFileChange}
+//               multiple
+//             />
+//             <label htmlFor="contained-button-file">
+//               <Button variant="contained" color="primary" component="span">
+//                 Upload Picture
+//               </Button>
+//             </label>
+//           </Grid>
+//           <Grid item xs={12}>
+//             <Button
+//               type="submit"
+//               variant="contained"
+//               color="primary"
+//               style={{ backgroundColor: "#1976d2" }}
+//             >
+//               Submit
+//             </Button>
+//           </Grid>
+//         </Grid>
+//       </form>
+//       <Typography variant="h5" align="center" gutterBottom>
+//         <Divider className="pt-2" />
+//       </Typography>
+//       <Grid container spacing={2}>
+//         {pictures?.map((picture, index) => (
+//           <Grid item key={index}>
+//             <Card
+//               style={{
+//                 position: "relative",
+//                 width: 120,
+//                 overflow: "hidden",
+//                 backfaceVisibility: "hidden",
+//               }}
+//               onMouseEnter={(e) =>
+//                 (e.currentTarget.querySelector(".overlay").style.opacity = 1)
+//               }
+//               onMouseLeave={(e) =>
+//                 (e.currentTarget.querySelector(".overlay").style.opacity = 0)
+//               }
+//             >
+//               <CardMedia
+//                 component="img"
+//                 alt={`Picture ${index}`}
+//                 image={picture}
+//                 style={{ height: 140, overflow: "hidden" }}
+//               />
+//               <div
+//                 className="overlay"
+//                 style={{
+//                   position: "absolute",
+//                   top: 0,
+//                   left: 0,
+//                   backfaceVisibility: "hidden",
+//                   width: "100%",
+//                   height: "100%",
+//                   backgroundColor: "rgba(0, 0, 0, 0.5)",
+//                   display: "flex",
+//                   flexDirection: "column",
+//                   justifyContent: "space-around",
+//                   alignItems: "center",
+//                   opacity: 0,
+//                   overflow: "hidden",
+//                 }}
+//               >
+//                 <Button
+//                   variant="contained"
+//                   style={{ backgroundColor: "#1565c0", display: "block" }}
+//                   onClick={() => handleViewImage(picture)}
+//                 >
+//                   <VisibilityIcon />
+//                 </Button>
+//                 <Button
+//                   variant="outlined"
+//                   color="secondary"
+//                   style={{ backgroundColor: "#1565c0", color: "white" }}
+//                   onClick={() => handleRemovePicture(index)}
+//                 >
+//                   <DeleteForeverIcon />
+//                 </Button>
+//               </div>
+//             </Card>
+//           </Grid>
+//         ))}
+//       </Grid>
+
+//       <Dialog open={!!selectedImage} onClose={handleCloseImage}>
+//         <DialogContent>
+//           <img
+//             src={selectedImage}
+//             alt="Selected"
+//             style={{ maxWidth: "100%", maxHeight: "100%" }}
+//           />
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={handleCloseImage}>Close</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </Container>
+//   );
+// }
+
+// export default CarDetail;
+
+// "use client";
+
+// import React, { useState } from "react";
+// import {
+//   TextField,
+//   Button,
+//   Container,
+//   Typography,
+//   Grid,
+//   Card,
+//   CardMedia,
+//   Dialog,
+//   DialogContent,
+//   DialogActions,
+//   Divider,
+// } from "@mui/material";
+// import VisibilityIcon from "@mui/icons-material/Visibility";
+// import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
+// import { useForm } from "react-hook-form";
+
+// function CarDetail() {
+//   const [carModel, setCarModel] = useState("");
+//   const [price, setPrice] = useState("");
+//   const [phoneNumber, setPhoneNumber] = useState("");
+//   const [maxPictures, setMaxPictures] = useState(5); // Default max pictures
+//   const [pictures, setPictures] = useState([]);
+//   const [selectedImage, setSelectedImage] = useState(null);
+//   const schema = yup.object().shape({
+//     carModel: yup.string().required("Car model is required"),
+//     price: yup.number().required("Price is required"),
+//     phoneNumber: yup
+//       .string()
+//       .matches(/^[0-9]{11}$/, "Invalid phone number")
+//       .required("Phone number is required"),
+//     maxPictures: yup
+//       .number()
+//       .min(1, "Min value is 1")
+//       .max(10, "Max value is 10")
+//       .required("Max number of pictures is required"),
+//   });
+//   const {
+//     handleSubmit,
+//     register,
+//     formState: { errors },
+//   } = useForm({
+//     resolver: yupResolver(schema),
+//   });
+//   console.log(errors);
+
+//   const handleFileChange = (e) => {
+//     const files = Array.from(e.target.files);
+//     const urls = files.map((file) => URL.createObjectURL(file));
+//     const newUrls = urls.filter((url) => typeof url === "string"); // Filter out non-URL values
+//     console.log(newUrls);
+//     const limitedUrls = newUrls.slice(0, maxPictures); // Limit the number of pictures
+//     setPictures([...limitedUrls]);
+//   };
+
+//   const handleRemovePicture = (index) => {
+//     const updatedPictures = pictures.filter((_, i) => i !== index);
+//     setPictures(updatedPictures);
+//   };
+
+//   const handleViewImage = (image) => {
+//     setSelectedImage(image);
+//   };
+
+//   const handleCloseImage = () => {
+//     setSelectedImage(null);
+//   };
+
+//   const handleFormSubmit = (data) => {
+//     // e.preventDefault();
+//     // Here you can handle the form submission, for example, send the data to a server
+//     console.log(data);
+//   };
+
+//   return (
+//     <Container maxWidth="sm">
+//       <Typography variant="h4" align="center" gutterBottom>
+//         Car Information
+//       </Typography>
+//       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+//         <Grid container spacing={2}>
+//           <Grid item xs={12} md={6}>
+//             <TextField
+//               {...register("carModel")}
+//               label="Car Model"
+//               variant="outlined"
+//               fullWidth
+//               value={carModel}
+//               onChange={(e) => setCarModel(e.target.value)}
+//               required
+//               error={!!errors.carModel}
+//               helperText={errors?.carModel}
+//             />
+//           </Grid>
+//           <Grid item xs={12} md={6}>
+//             <TextField
+//               {...register("price")}
+//               label="Price"
+//               variant="outlined"
+//               fullWidth
+//               value={price}
+//               onChange={(e) => setPrice(e.target.value)}
+//               required
+//               error={!!errors.price}
+//               helperText={errors?.price}
+//             />
+//           </Grid>
+//           <Grid item xs={12}>
+//             <TextField
+//               {...register("phoneNumber")}
+//               label="Phone Number"
+//               variant="outlined"
+//               fullWidth
+//               value={phoneNumber}
+//               type="text" // Change type to text
+//               onChange={(e) => setPhoneNumber(e.target.value)}
+//               error={!!errors.phoneNumber}
+//               helperText={errors?.phoneNumber}
+//             />
+//           </Grid>
+//           <Grid item xs={12}>
+//             <TextField
+//               {...register("maxPictures")}
+//               label="Max Number of Pictures"
+//               variant="outlined"
+//               type="number"
+//               fullWidth
+//               value={maxPictures ? maxPictures : 1}
+//               aria-valuemax={10}
+//               inputProps={{ min: 1, max: 10 }}
+//               onChange={(e) => setMaxPictures(parseInt(e.target.value))}
+//               error={!!errors.maxPictures}
+//               helperText={errors?.maxPictures}
+//             />
+//           </Grid>
+//           <Grid item xs={12}>
+//             <input
+//               accept="image/*"
+//               id="contained-button-file"
+//               type="file"
+//               style={{ display: "none" }}
+//               onChange={handleFileChange}
+//               multiple
+//             />
+//             <label htmlFor="contained-button-file">
+//               <Button variant="contained" color="primary" component="span">
+//                 Upload Picture
+//               </Button>
+//             </label>
+//           </Grid>
+//           <Grid item xs={12}>
+//             <Button
+//               type="submit"
+//               variant="contained"
+//               color="primary"
+//               style={{ backgroundColor: "#1976d2" }}
+//             >
+//               Submit
+//             </Button>
+//           </Grid>
+//         </Grid>
+//       </form>
+//       <Typography variant="h5" align="center" gutterBottom>
+//         <Divider className="pt-2" />
+//       </Typography>
+//       <Grid container spacing={2}>
+//         {pictures?.map((picture, index) => (
+//           <Grid item key={index}>
+//             <Card
+//               style={{
+//                 position: "relative",
+//                 width: 120,
+//                 overflow: "hidden",
+//                 backfaceVisibility: "hidden",
+//               }}
+//               onMouseEnter={(e) =>
+//                 (e.currentTarget.querySelector(".overlay").style.opacity = 1)
+//               }
+//               onMouseLeave={(e) =>
+//                 (e.currentTarget.querySelector(".overlay").style.opacity = 0)
+//               }
+//             >
+//               <CardMedia
+//                 component="img"
+//                 alt={`Picture ${index}`}
+//                 image={picture}
+//                 style={{ height: 140, overflow: "hidden" }}
+//               />
+//               <div
+//                 className="overlay"
+//                 style={{
+//                   position: "absolute",
+//                   top: 0,
+//                   left: 0,
+//                   backfaceVisibility: "hidden",
+//                   width: "100%",
+//                   height: "100%",
+//                   backgroundColor: "rgba(0, 0, 0, 0.5)",
+//                   display: "flex",
+//                   flexDirection: "column",
+//                   justifyContent: "space-around",
+//                   alignItems: "center",
+//                   opacity: 0,
+//                   overflow: "hidden",
+//                 }}
+//               >
+//                 <Button
+//                   variant="contained"
+//                   style={{ backgroundColor: "#1565c0", display: "block" }}
+//                   onClick={() => handleViewImage(picture)}
+//                 >
+//                   <VisibilityIcon />
+//                 </Button>
+//                 <Button
+//                   variant="outlined"
+//                   color="secondary"
+//                   style={{ backgroundColor: "#1565c0", color: "white" }}
+//                   onClick={() => handleRemovePicture(index)}
+//                 >
+//                   <DeleteForeverIcon />
+//                 </Button>
+//               </div>
+//             </Card>
+//           </Grid>
+//         ))}
+//       </Grid>
+// ? true : false
+//       <Dialog open={!!selectedImage} onClose={handleCloseImage}>
+//         <DialogContent>
+//           <img
+//             src={selectedImage}
+//             alt="Selected"
+//             style={{ maxWidth: "100%", maxHeight: "100%" }}
+//           />
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={handleCloseImage}>Close</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </Container>
+//   );
+// }
+
+// export default CarDetail;
+// const fileAsText = (file) => {
+//   return new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.readAsText(file);
+//     reader.onload = () => {
+//       resolve(reader.result);
+//     };
+//     reader.onerror = (error) => {
+//       reject(error);
+//     };
+//   });
+// };
+
+// const boundary = "---------------------------" + Date.now().toString(16);
+// let formDataString = "";
+
+// for (let i = 0; i < files.length; i++) {
+//   const file = files[i];
+
+//   formDataString += "--" + boundary + "\r\n";
+//   formDataString +=
+//     'Content-Disposition: form-data; name="file' +
+//     i +
+//     '"; filename="' +
+//     file.name +
+//     '"\r\n';
+//   formDataString += "Content-Type: " + file.type + "\r\n\r\n";
+//   const fileContent = await fileAsText(file);
+//   formDataString += fileContent + "\r\n";
+// }
+
+// formDataString += "--" + boundary + "--";
