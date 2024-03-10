@@ -4,6 +4,7 @@ import path from "path";
 import { writeFile } from "fs/promises";
 
 export const config = {
+  runtime: "nodejs",
   api: {
     bodyParser: false,
   },
