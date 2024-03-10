@@ -5,16 +5,21 @@ import { NextRequest } from "next/server";
 export async function middleware(request, response) {
   const path = request.nextUrl.pathname;
   const token = request.cookies.get("token")?.value;
-  if (!token) {
+  if (!token && path !== "/") {
     return NextResponse.redirect(new URL("/", request.url));
   }
-  console.log(path);
-  if (path == "/" && token)
-    return NextResponse.redirect(new URL("/add_car_details", request.url));
+
+  if (path === "/add_car_details" && token) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
   return NextResponse.next();
 }
 
-// See "Matching Paths" below to learn more
-export const config = {
-  matcher: ["/add_car_details", "/"],
-};
+export function routeConfig() {
+  return {
+    api: {
+      middleware: "middleware",
+      matcher: ["/add_car_details", "/"],
+    },
+  };
+}
