@@ -4,7 +4,7 @@ import { Button, Container, TextField, Typography } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { toast, Toaster } from "react-hot-toast";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
   password: yup.string().required("Password is required"),
@@ -43,7 +43,10 @@ const Login = () => {
       }; expires=${expirationDate.toUTCString()}; path=/`;
 
       push("/add_car_details");
+      console.log(res);
     } catch (e) {
+      console.log(e);
+      console.log(e);
       toast.error(e.message);
     }
   };

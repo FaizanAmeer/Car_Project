@@ -38,7 +38,7 @@ function CarDetail() {
     const files = Array.from(e.target.files).slice(0, maxPictures);
     const urls = files.map((file) => URL.createObjectURL(file));
     const newUrls = urls.filter((url) => typeof url === "string"); // Filter out non-URL values
-    
+
     const limitedUrls = newUrls.slice(0, maxPictures); // Limit the number of pictures
     setPictures([...limitedUrls]);
     setImages([...files]);
@@ -86,7 +86,7 @@ function CarDetail() {
         setUrls([...data.url]);
         sbUrls.push(...data.url);
       }
-      
+
       const value = {
         carModel,
         price,
@@ -94,7 +94,7 @@ function CarDetail() {
         maxPictures,
         images: sbUrls.length > 0 ? sbUrls : urls,
       };
-      
+
       const token = getToken(); ///here token avaliable
       const sendDetail = await fetch("api/add_car_detail", {
         method: "POST",

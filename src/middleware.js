@@ -14,12 +14,8 @@ export async function middleware(request, response) {
   }
   return NextResponse.next();
 }
+export const config = {
+  matcher: ["/add_car_details", "/"],
+};
 
-export function routeConfig() {
-  return {
-    api: {
-      middleware: "middleware",
-      matcher: ["/add_car_details", "/"],
-    },
-  };
-}
+
