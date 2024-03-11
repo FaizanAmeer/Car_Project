@@ -14,6 +14,7 @@ export async function POST(req, res) {
       }
       const { id } = await Auth.verifyToken(token);
       const data = await req.json();
+      console.log(data);
       const validation = schema.validateSync({
         ...data,
         maxPictures: data?.images?.length,
@@ -27,7 +28,7 @@ export async function POST(req, res) {
         pictures: data?.images,
         userId: id,
       };
-
+      console.log(submitValues);
       const car = await carDetail.create({
         ...submitValues,
       });

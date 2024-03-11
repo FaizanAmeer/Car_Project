@@ -94,7 +94,7 @@ function CarDetail() {
         maxPictures,
         images: sbUrls.length > 0 ? sbUrls : urls,
       };
-
+      console.log(value);
       const token = getToken(); ///here token avaliable
       const sendDetail = await fetch("api/add_car_detail", {
         method: "POST",
