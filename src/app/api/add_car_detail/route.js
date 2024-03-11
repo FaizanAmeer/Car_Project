@@ -14,7 +14,6 @@ export async function POST(req, res) {
       }
       const { id } = await Auth.verifyToken(token);
       const data = await req.json();
-      console.log(data);
       const validation = schema.validateSync({
         ...data,
         maxPictures: data?.images?.length,

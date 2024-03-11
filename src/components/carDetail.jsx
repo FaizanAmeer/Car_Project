@@ -86,7 +86,8 @@ function CarDetail() {
         setUrls([...data.url]);
         sbUrls.push(...data.url);
       }
-
+      console.log(sbUrls.length > 0 ? sbUrls : urls);
+      console.log(sbUrls, urls);
       const value = {
         carModel,
         price,
