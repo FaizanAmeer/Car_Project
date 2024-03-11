@@ -42,6 +42,7 @@ const Login = () => {
         res.user.accessToken
       }; expires=${expirationDate.toUTCString()}; path=/`;
 
+      window.location = "/add_car_details";
       push("/add_car_details");
       console.log(res);
     } catch (e) {
